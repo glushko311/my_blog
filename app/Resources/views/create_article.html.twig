@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block title %}Create New Article{% endblock %}
+{% block pageTitle %}Create New Article{% endblock %}
+{% block body %}
+    <form method="POST" action="">
+        <div>
+            <label for="artName">Article Name</label>
+            <input id="artName1" name="artName" required type="text">
+        </div>
+        <div>
+            <label for="artDescr">Article Description</label>
+            <textarea id="artDescr1" name="artDescr" required></textarea>
+        </div>
+        <div>
+            <label for="catId">Category Id</label>
+            <input id="catId1" name="catId" type="number" required>
+        </div>
+        <button id="createArtBtn1" type="submit">Create</button>
+    </form>
+{% endblock %}
+
+{% block js %}
+    {#<script src="{{ (asset('js/create_article.js'))}}"></script>#}
+{% endblock %}
+

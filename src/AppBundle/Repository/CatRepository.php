@@ -44,8 +44,7 @@ class CatRepository extends EntityRepository
     public function delete(Cat $cat){
         $cat->setDeletedAt(new \DateTime());
     }
-
-
+    
     /**
      * @param Cat $cat
      */
@@ -54,16 +53,5 @@ class CatRepository extends EntityRepository
         $this->_em->persist($cat);
         $this->_em->flush($cat);
     }
-
-
-    /**
-     * @param Cat $cat
-     */
-    public function restore(Cat $cat)
-    {
-        $cat->restore();
-        $this->_em->flush($cat);
-    }
-
     
 }

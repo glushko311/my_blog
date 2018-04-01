@@ -7,16 +7,17 @@
  */
 
 namespace AppBundle\Entity;
+use AppBundle\Entity\Cat;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
 * Category
-* @ORM\Entity(repositoryClass="AppBundle\Repository\CatRepository")
-* @ORM\Table(name="categories")
+* @ORM\Entity(repositoryClass="AppBundle\Repository\ArticleRepository")
+* @ORM\Table(name="articles")
 //* @ORM\HasLifecycleCallbacks()
 */
-class Cat
+class Article
 {
     /**
      * @var int
@@ -33,6 +34,12 @@ class Cat
     private $name;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private $description;
+
+
+    /**
      * @var DateTime
      * @ORM\Column(name="updated_at", type="datetime")
      */
@@ -44,18 +51,25 @@ class Cat
      */
     private $deletedAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Cat", inversedBy="categories")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $cat;
 
     /**
-     * Cat constructor.
-     * @param string $name
+     * Article constructor.
+     * @param $name
+     * @param $description
+     * @param \AppBundle\Entity\Cat $cat
      */
-    public function __construct($name){
+    public function __construct($name,  $description, Cat $cat){
         $this->name = $name;
+        $this->description = $description;
         $this->updatedAt = new DateTime();
         $this->deletedAt = null;
+        $this->cat = $cat;
     }
-
-
     /**
      * Get id
      *
@@ -136,5 +150,45 @@ class Cat
     public function getDeletedAt()
     {
         return $this->deletedAt;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Article
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCat()
+    {
+        return $this->cat;
+    }
+
+    /**
+     * @param \AppBundle\Entity\Cat $cat
+     */
+    public function setCategory(Cat $cat)
+    {
+        $this->cat = $cat;
     }
 }
