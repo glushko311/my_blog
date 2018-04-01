@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block title %}Create New Category{% endblock %}
+{% block pageTitle %}Create New Category{% endblock %}
+{% block body %}
+    <form method="POST" action="">
+        <label for="catName">Category Name</label>
+        <input id="catName1" name="catName" required type="text">
+        <button id="createCatBtn1" type="submit">Create</button>
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ (asset('js/create_cat.js'))}}"></script>
+{% endblock %}
+
