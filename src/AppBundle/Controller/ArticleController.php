@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 use AppBundle\Controller\ApiController;
 use AppBundle\Entity\Article;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -22,13 +23,11 @@ class ArticleController extends  ApiController
      */
     public function indexAction()
     {
-        $catRepo = $this->entityManager->getRepository('AppBundle:Article');
-        $cat = $catRepo->all();
+        $artRepo = $this->entityManager->getRepository('AppBundle:Article');
+        $art = $artRepo->all();
 
-        return $this->json($cat, 200);
+        return $this->json($art, 200);
     }
-
-
     /**
      * @Route("/article/new", name="article_new")
      * @Method("POST")
@@ -77,6 +76,85 @@ class ArticleController extends  ApiController
         return $this->json([], 200);
     }
 
+    /**
+     * @Route("/articles/cat/{id}", name="articles_by_cat", requirements={"id": "\d+"})
+     * @Method("GET")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function byCatAction(Request $request)
+    {
+        $catId = !empty($request->get('id')) ? $request->get('id') : 0;
+        $catRepo = $this->entityManager->getRepository('AppBundle:Cat');
+        $cat = $catRepo->byId($catId);
 
 
+        if(empty($cat)){
+            return $this->json(['error'=>"Category with id {$catId} is not found!"], 404);
+        }
+        $artRepo = $this->entityManager->getRepository('AppBundle:Article');
+        $arts = $artRepo->byCategoryId($catId);
+
+        return $this->json($arts, 200);
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/articles/edit/{id}", name="articles_edit", requirements={"id": "\d+"})
+     * @Method("POST")
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function editAction(Request $request)
+    {
+        $newCatId = !empty($request->request->get('catId')) ? $request->request->get('catId') : 0;
+        $newName = $request->request->get('name') ? $request->request->get('name') : 0;
+        $newDescr = $request->request->get('description') ? $request->request->get('description') : 0;
+
+        $artId = !empty($request->get('id')) ? $request->get('id') : 0;
+
+        $artRepo = $this->entityManager->getRepository('AppBundle:Article');
+        $art = $artRepo->byId($artId);
+        
+        if(empty($art)){
+            return $this->json(['error'=>"Article with id {$artId} is not found!"], 404);
+        }
+        if(!empty($newCatId)){
+            $catRepo = $this->entityManager->getRepository('AppBundle:Cat');
+            $cat = $catRepo->byId($newCatId);
+            if(!empty($cat)){
+                $art->setCat($cat);
+            }
+        }
+        if(!empty($newName)){
+            $art->setName($newName);
+        }
+        if(!empty($newDescr)){
+            $art->setDescription($newDescr);
+        }
+        
+        $artRepo->store($art);
+
+        return $this->json($art, 200);
+    }
+
+
+    /**
+     * @Route("/articles/edit/{id}", name="articles_edit_form", requirements={"id": "\d+"})
+     * @Method("GET")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function getEditFormAction(Request $request)
+    {
+        $artId = !empty($request->get('id')) ? $request->get('id') : 0;
+
+        $artRepo = $this->entityManager->getRepository('AppBundle:Article');
+        $art = $artRepo->byId($artId);
+
+        if(empty($art)){
+            return $this->json(['error'=>"Article with id {$artId} is not found!"], 404);
+        }
+        return $this->render("/edit_article.html.twig", ['art'=>$art]);
+    }
+    
 }

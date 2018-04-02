@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block title %}Edit Article{% endblock %}
+{% block pageTitle %}Edit Article{% endblock %}
+{% block body %}
+    <form method="POST" action="">
+        <div>
+            <label for="artName">Article Name</label>
+            <input id="artName1" name="name" required type="text" value="{{ art.name }}">
+        </div>
+        <div>
+            <label for="artDescr">Article Description</label>
+            <textarea id="artDescr1" name="description" required>{{ art.description }}</textarea>
+        </div>
+        <div>
+            <label for="catId">Category Id</label>
+            <input id="catId1" name="catId" type="number" required  value="{{ art.cat.id }}">
+        </div>
+        <button id="createArtBtn1" type="submit">Edit</button>
+    </form>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
+

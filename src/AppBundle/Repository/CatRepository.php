@@ -11,6 +11,8 @@ namespace AppBundle\Repository;
 use AppBundle\Entity\Cat;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Validator\Constraints\DateTime;
+use \Doctrine\ORM\NoResultException;
+
 
 class CatRepository extends EntityRepository
 {
@@ -35,7 +37,13 @@ class CatRepository extends EntityRepository
             ->where('c.deletedAt is NULL')
             ->andWhere('c.id=:id')
             ->setParameter('id',$id);
-        return $builder->getQuery()->getSingleResult();
+        try{
+            $cat = $builder->getQuery()->getSingleResult();
+        }catch(NoResultException $e){
+            return null;
+        }
+
+        return $cat;
     }
 
     /**

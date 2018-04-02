@@ -11,6 +11,7 @@ namespace AppBundle\Repository;
 use AppBundle\Entity\Article;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Validator\Constraints\DateTime;
+use \Doctrine\ORM\NoResultException;
 
 class ArticleRepository extends EntityRepository
 {
@@ -19,9 +20,10 @@ class ArticleRepository extends EntityRepository
      */
     public function all(){
         $builder = $this->createQueryBuilder('a')
-            ->where('a.deletedAt is NULL');
+            ->where('a.deletedAt is NULL')
+            ->join('a.cat', 'c');
         
-        return $builder->getQuery()->getArrayResult();
+        return $builder->getQuery()->getResult();
     }
 
     /**
@@ -34,23 +36,31 @@ class ArticleRepository extends EntityRepository
         $builder = $this->createQueryBuilder('a')
             ->where('a.deletedAt is NULL')
             ->andWhere('a.id=:id')
+            ->join('a.cat', 'c')
             ->setParameter('id',$id);
-        return $builder->getQuery()->getSingleResult();
+
+        try{
+            $art = $builder->getQuery()->getSingleResult();
+        }catch(NoResultException $e){
+            return null;
+        }
+        return  $art;
     }
 
-//    /**
-//     * @param $id
-//     * @return mixed
-//     * @throws \Doctrine\ORM\NoResultException
-//     * @throws \Doctrine\ORM\NonUniqueResultException
-//     */
-//    public function byCategoryId($id){
-//        $builder = $this->createQueryBuilder('a')
-//            ->where('a.deletedAt is NULL')
-//            ->andWhere('a.id=:id')
-//            ->setParameter('id',$id);
-//        return $builder->getQuery()->getSingleResult();
-//    }
+    /**
+     * @param $id
+     * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function byCategoryId($id){
+        $builder = $this->createQueryBuilder('a')
+            ->join('a.cat', 'c')
+            ->where('a.deletedAt is NULL')
+            ->andWhere('c.id=:id')
+            ->setParameter('id',$id);
+        return $builder->getQuery()->getArrayResult();
+    }
 
     /**
      * @param Article $article

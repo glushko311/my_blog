@@ -187,7 +187,7 @@ class Article
     /**
      * @param \AppBundle\Entity\Cat $cat
      */
-    public function setCategory(Cat $cat)
+    public function setCat(Cat $cat)
     {
         $this->cat = $cat;
     }
