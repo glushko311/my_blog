@@ -27,16 +27,28 @@ sudo php bin/console fos:user:create adminuser –super-admin
 
 		API MANUAL
 /login -  login form, logout button  – for GUEST
+
 /register – registration form  – for GUEST
-/cat – get categories api output format – json – for GUEST
-/cat/new - method GET – get create category form – for ADMIN
-/cat/new - method POST – create category api – for ADMIN
-/cat/delete/{id} – method POST – delete category by id api – for ADMIN
-/articles  - get articles api output format – json – for GUEST
-/articles/cat/{id} - get articles by category api output format – json 
-/article/new -  method GET – get create article form – for ADMIN
-/article/new - method POST – create article api – for ADMIN
-/article/edit/{id} -  method GET – get edit article by id form  - for USER
-/article/edit/{id} - method POST – edit article by id  api   - for USER
-/article/delete/{id} – method POST – delete article by id api - for ADMIN
+
+/cat – get categories api output format – json – access enabled for GUEST, USER, ADMIN
+
+/cat/new - method GET – get create category form – access enabled for ADMIN
+
+/cat/new - method POST – create category api – access enabled for ADMIN
+
+/cat/delete/{id} – method POST – delete category by id api – access enabled for ADMIN
+
+/articles  - get articles api output format – json – access enabled for GUEST, USER, ADMIN
+
+/articles/cat/{id} - get articles by category api output format – json – access enabled for GUEST, USER, ADMIN
+
+/article/new -  method GET – get create article form – access enabled for ADMIN
+
+/article/new - method POST – create article api – access enabled for ADMIN
+
+/article/edit/{id} -  method GET – get edit article by id form – access enabled for USER ADMIN
+
+/article/edit/{id} - method POST – edit article by id  api – access enabled for USER ADMIN
+
+/article/delete/{id} – method POST – delete article by id api – access enabled for ADMINN
 
