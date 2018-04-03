@@ -22,10 +22,20 @@ security:
             anonymous:    true
 
     access_control:
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/, role: ROLE_ADMIN }
+
+#        - { path: ^/cat, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        - { path: ^/cat/new, role: ROLE_ADMIN, methods:[GET, POST]}
+        - { path: ^/cat/delete/(.+), role: ROLE_ADMIN, methods:[GET]}
+
+#        - { path: ^/articles, role: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/articles/cat/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/articles/edit/, role: ROLE_USER, methods:[GET, POST]}
+
+        - { path: ^/article/new, role: ROLE_ADMIN, methods:[GET, POST] }
+        - { path: ^/article/delete/(.+), role: ROLE_ADMIN, methods:[GET]}
 
 
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded

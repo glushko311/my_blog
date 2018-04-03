@@ -43,11 +43,14 @@ class ArticleController extends  ApiController
         $artRepo = $this->entityManager->getRepository('AppBundle:Article');
         $catRepo = $this->entityManager->getRepository('AppBundle:Cat');
         $cat = $catRepo->byId($catId );
+        if(empty($cat)){
+            return $this->json(['error'=>"Category with id {$catId} is not found!"], 400);
+        }
         $art = new Article($name, $description, $cat);
 
         $artRepo->store($art);
 
-        return $this->json($art, 200);
+        return $this->json(['message'=>"Article with name {$art->getName()} has been successfully created!"], 200);
     }
 
     /**
@@ -70,10 +73,13 @@ class ArticleController extends  ApiController
         $id = (int)$request->get('id');
         $artRepo = $this->entityManager->getRepository('AppBundle:Article');
         $art = $artRepo->byId($id);
+        if(empty($art)){
+            return $this->json(['error'=>"Article with id {$id} is not found!"], 404);
+        }
         $art->setDeletedAt(new \DateTime());
         $artRepo->store($art);
 
-        return $this->json([], 200);
+        return $this->json(['message'=>'Article '.$art->getName().'has been successfully deleted'], 200);
     }
 
     /**
@@ -123,6 +129,8 @@ class ArticleController extends  ApiController
             $cat = $catRepo->byId($newCatId);
             if(!empty($cat)){
                 $art->setCat($cat);
+            }else{
+                return $this->json(['error'=>"Category with {$newCatId} is not found!"], 404);
             }
         }
         if(!empty($newName)){
@@ -134,7 +142,7 @@ class ArticleController extends  ApiController
         
         $artRepo->store($art);
 
-        return $this->json($art, 200);
+        return $this->json(['message'=>"Article with id = {$art->getId()} has been successfully updated"], 200);
     }
 
 

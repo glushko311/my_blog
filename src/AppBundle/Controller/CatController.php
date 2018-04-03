@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 use AppBundle\Controller\ApiController;
 use AppBundle\Entity\Cat;
+use AppBundle\Entity\Article;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -28,7 +29,6 @@ class CatController extends  ApiController
         return $this->json($cat, 200);
     }
 
-
     /**
      * @Route("/cat/new", name="category_new")
      * @Method("POST")
@@ -44,7 +44,7 @@ class CatController extends  ApiController
 
         $catRepo->store($cat);
 
-        return $this->json($cat, 200);
+        return $this->json(['message'=>'Category '.$cat->getName().'has been successfully created'], 200);
     }
 
     /**
@@ -53,7 +53,7 @@ class CatController extends  ApiController
      */
     public function getFormAction()
     {
-        return $this->render("AppBundle:Default:create_cat.html.twig");
+        return $this->render("create_cat.html.twig");
     }
 
     /**
@@ -67,10 +67,18 @@ class CatController extends  ApiController
         $id = (int)$request->get('id');
         $catRepo = $this->entityManager->getRepository('AppBundle:Cat');
         $cat = $catRepo->byId($id);
+        if(empty($cat)){
+            return $this->json(['error'=>"Category with id {$id} is not found!"], 400);
+        }
+        $artRepo = $this->entityManager->getRepository('AppBundle:Article');
+        $arts = $artRepo->byCategoryId($id);
+        if(!empty($arts)){
+            return $this->json(['error'=>"Category {$cat->getName()} is not empty! Please clean it first!"], 406);
+        }
         $cat->setDeletedAt(new \DateTime());
         $catRepo->store($cat);
 
-        return $this->json([], 200);
+        return $this->json(['message'=>'Category '.$cat->getName().'has been successfully deleted'], 200);
     }
 
 
