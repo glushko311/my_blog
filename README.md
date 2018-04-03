@@ -26,7 +26,10 @@ sudo php bin/console server:run
 To create admin use command:
 sudo php bin/console fos:user:create adminuser –super-admin
 
+*My local configs of Apache and PHP from /etc/php/5.6 is in folder  /PHP_APACHE_config in project
+
 		API MANUAL
+
 /login -  login form, logout button  – for GUEST
 
 /register – registration form  – for GUEST
