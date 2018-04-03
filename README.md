@@ -4,6 +4,7 @@ My Blog simple blog API on Symfony
 A Symfony project created on March 31, 2018, 10:58 pm.
 
 INSTALL PROJECT INSTRUCTIONS
+
 Project need php5.6 apache and mysql
 
 Open terminal in path of project
