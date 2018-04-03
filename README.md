@@ -37,7 +37,7 @@ sudo php bin/console fos:user:create adminuser –super-admin
 
 /cat/new - method POST – create category api – access enabled for ADMIN
 
-/cat/delete/{id} – method POST – delete category by id api – access enabled for ADMIN
+/cat/delete/{id} – method GET – delete category by id api – access enabled for ADMIN
 
 /articles  - get articles api output format – json – access enabled for GUEST, USER, ADMIN
 
@@ -51,5 +51,5 @@ sudo php bin/console fos:user:create adminuser –super-admin
 
 /article/edit/{id} - method POST – edit article by id  api – access enabled for USER ADMIN
 
-/article/delete/{id} – method POST – delete article by id api – access enabled for ADMINN
+/article/delete/{id} – method GET – delete article by id api – access enabled for ADMINN
 
